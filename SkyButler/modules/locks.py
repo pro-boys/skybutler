@@ -20,23 +20,23 @@ from SkyButler.modules.log_channel import loggable
 from SkyButler.modules.translations.strings import sbt
 from SkyButler.modules.sql import users_sql
 
-LOCK_TYPES = {'sticker': Filters.sticker,
+LOCK_TYPES = {'stickers': Filters.sticker,
               'audio': Filters.audio,
               'voice': Filters.voice,
-              'document': Filters.document & ~Filters.animation,
-              'video': Filters.video,
-              'videonote': Filters.video_note,
-              'contact': Filters.contact,
-              'photo': Filters.photo,
-              'gif': Filters.animation,
-              'url': Filters.entity(MessageEntity.URL) |
+              'documents': Filters.document & ~Filters.animation,
+              'videos': Filters.video,
+              'videonotes': Filters.video_note,
+              'contacts': Filters.contact,
+              'photos': Filters.photo,
+              'gifs': Filters.animation,
+              'urls': Filters.entity(MessageEntity.URL) |
                      Filters.caption_entity(MessageEntity.URL) |
                      Filters.entity(MessageEntity.TEXT_LINK) |
                      Filters.caption_entity(MessageEntity.TEXT_LINK),
               'bots': Filters.status_update.new_chat_members,
-              'forward': Filters.forwarded,
-              'game': Filters.game,
-              'location': Filters.location,
+              'forwards': Filters.forwarded,
+              'games': Filters.game,
+              'locations': Filters.location,
               }
 
 GIF = Filters.animation
