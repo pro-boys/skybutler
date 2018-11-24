@@ -116,17 +116,17 @@ def unblacklist(bot: Bot, update: Update):
 def del_blacklist(bot: Bot, update: Update):
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
-    to_match = extract_text(message)
-    if not to_match:
+    match_string = extract_text(message)
+    if not match_string:
         return
-
+    to_match=match_string.split(" ")
     chat_filters = sql.get_chat_blacklist(chat.id)
     for trigger in chat_filters:
-        pattern = r"( |^|[^\w])" + re.escape(trigger) + r"( |$|[^\w])"
-        if re.search(pattern, to_match, flags=re.IGNORECASE):
-            try:
+        for word in to_match:
+            if re.fullmatch(keyword,word,flags=re.IGNORECASE):
+             try:
                 message.delete()
-            except BadRequest as excp:
+             except BadRequest as excp:
                 if excp.message == "Message to delete not found":
                     pass
                 else:
