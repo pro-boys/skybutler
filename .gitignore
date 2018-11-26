@@ -1,7 +1,8 @@
-tg_bot/config.py
 *.pyc
 .idea/
 .project
 .pydevproject
 .directory
 .vscode
+SkyButler/config.py
+SkyButler/*.pem
