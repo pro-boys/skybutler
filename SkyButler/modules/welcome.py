@@ -1,4 +1,5 @@
-import html,time
+import html
+import time
 from typing import Optional, List
 
 from telegram import Message, Chat, Update, Bot, User
@@ -18,7 +19,15 @@ from SkyButler.modules.helper_funcs.string_handling import markdown_parser, \
     escape_invalid_curly_brackets
 from SkyButler.modules.log_channel import loggable
 
-VALID_WELCOME_FORMATTERS = ['first', 'last', 'fullname', 'username', 'id', 'count', 'chatname', 'mention']
+VALID_WELCOME_FORMATTERS = [
+    'first',
+    'last',
+    'fullname',
+    'username',
+    'id',
+    'count',
+    'chatname',
+    'mention']
 
 ENUM_FUNC_MAP = {
     sql.Types.TEXT.value: dispatcher.bot.send_message,
@@ -35,7 +44,8 @@ ENUM_FUNC_MAP = {
 # do not async
 def send(update, message, keyboard, backup_message):
     try:
-        msg = update.effective_message.reply_text(message, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
+        msg = update.effective_message.reply_text(
+            message, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
     except IndexError:
         msg = update.effective_message.reply_text(markdown_parser(backup_message +
                                                                   "\nNote: the current message was "
@@ -89,10 +99,21 @@ def new_member(bot: Bot, update: Update):
             continue
         if safe_mode:
             try:
-                bot.restrict_chat_member(chat.id, mems.id, can_send_messages=True, can_send_media_messages=False, can_send_other_messages=False, can_add_web_page_previews=False, until_date=(int(time.time() + safe_mode * 60 * 60)))
+                bot.restrict_chat_member(chat.id,
+                                         mems.id,
+                                         can_send_messages=True,
+                                         can_send_media_messages=False,
+                                         can_send_other_messages=False,
+                                         can_add_web_page_previews=False,
+                                         until_date=(int(time.time() + safe_mode * 60 * 60)))
             except BadRequest as excp:
                 LOGGER.warning(update)
-                LOGGER.exception("ERROR muting user %s in chat %s (%s) due to %s", mems.id, chat.title, chat.id, excp.message)
+                LOGGER.exception(
+                    "ERROR muting user %s in chat %s (%s) due to %s",
+                    mems.id,
+                    chat.title,
+                    chat.id,
+                    excp.message)
 
     should_welc, cust_welcome, welc_type = sql.get_welc_pref(chat.id)
     if should_welc:
@@ -100,7 +121,8 @@ def new_member(bot: Bot, update: Update):
         for new_mem in new_members:
             # Give the owner/sudo a special welcome
             if new_mem.id in SUDO_USERS:
-                update.effective_message.reply_text("Oh my bloody God. He is one of my controllers. May the force be with you!")
+                update.effective_message.reply_text(
+                    "Oh my bloody God. He is one of my controllers. May the force be with you!")
                 continue
 
             # Don't welcome yourself
@@ -113,11 +135,13 @@ def new_member(bot: Bot, update: Update):
                     ENUM_FUNC_MAP[welc_type](chat.id, cust_welcome)
                     return
                 # else, move on
-                first_name = new_mem.first_name or "PersonWithNoName"  # edge case of empty name - occurs for some bugs.
+                # edge case of empty name - occurs for some bugs.
+                first_name = new_mem.first_name or "PersonWithNoName"
 
                 if cust_welcome:
                     if new_mem.last_name:
-                        fullname = "{} {}".format(first_name, new_mem.last_name)
+                        fullname = "{} {}".format(
+                            first_name, new_mem.last_name)
                     else:
                         fullname = first_name
                     count = chat.get_members_count()
@@ -127,9 +151,11 @@ def new_member(bot: Bot, update: Update):
                     else:
                         username = mention
 
-                    valid_format = escape_invalid_curly_brackets(cust_welcome, VALID_WELCOME_FORMATTERS)
+                    valid_format = escape_invalid_curly_brackets(
+                        cust_welcome, VALID_WELCOME_FORMATTERS)
                     res = valid_format.format(first=escape_markdown(first_name),
-                                              last=escape_markdown(new_mem.last_name or first_name),
+                                              last=escape_markdown(
+                                                  new_mem.last_name or first_name),
                                               fullname=escape_markdown(fullname), username=username, mention=mention,
                                               count=count, chatname=escape_markdown(chat.title), id=new_mem.id)
                     buttons = sql.get_welc_buttons(chat.id)
@@ -163,7 +189,11 @@ def welcome(bot: Bot, update: Update, args: List[str]):
     if len(args) == 0 or args[0].lower() == "noformat":
         noformat = args and args[0].lower() == "noformat"
         pref, welcome_m, welcome_type = sql.get_welc_pref(chat.id)
-        update.effective_message.reply_text(sbt(chat_id, "This chat has it's welcome setting set to: `{}`.\n*The welcome message (not filling the {{}}) is:*").format(pref), parse_mode=ParseMode.MARKDOWN)
+        update.effective_message.reply_text(
+            sbt(
+                chat_id,
+                "This chat has it's welcome setting set to: `{}`.\n*The welcome message (not filling the {{}}) is:*").format(pref),
+            parse_mode=ParseMode.MARKDOWN)
 
         if welcome_type == sql.Types.BUTTON_TEXT:
             buttons = sql.get_welc_buttons(chat.id)
@@ -182,20 +212,24 @@ def welcome(bot: Bot, update: Update, args: List[str]):
                 ENUM_FUNC_MAP[welcome_type](chat.id, welcome_m)
 
             else:
-                ENUM_FUNC_MAP[welcome_type](chat.id, welcome_m, parse_mode=ParseMode.MARKDOWN)
+                ENUM_FUNC_MAP[welcome_type](
+                    chat.id, welcome_m, parse_mode=ParseMode.MARKDOWN)
 
     elif len(args) >= 1:
         if args[0].lower() in ("on", "yes"):
             sql.set_welc_preference(str(chat.id), True)
-            update.effective_message.reply_text(sbt(chat_id, "Welcome message turned on."))
+            update.effective_message.reply_text(
+                sbt(chat_id, "Welcome message turned on."))
 
         elif args[0].lower() in ("off", "no"):
             sql.set_welc_preference(str(chat.id), False)
-            update.effective_message.reply_text(sbt(chat_id, "Welcome message turned off."))
+            update.effective_message.reply_text(
+                sbt(chat_id, "Welcome message turned off."))
 
         else:
             # idek what you're writing, say yes or no
-            update.effective_message.reply_text(sbt(chat_id, "I understand 'on/yes' or 'off/no' only!"))
+            update.effective_message.reply_text(
+                sbt(chat_id, "I understand 'on/yes' or 'off/no' only!"))
 
 
 @run_async
@@ -231,7 +265,8 @@ def reset_welcome(bot: Bot, update: Update) -> str:
     chat_id = update.effective_chat.id
     user = update.effective_user  # type: Optional[User]
     sql.set_custom_welcome(chat.id, sql.DEFAULT_WELCOME, sql.Types.TEXT)
-    update.effective_message.reply_text(sbt(chat_id, "Successfully reset welcome message to default!"))
+    update.effective_message.reply_text(
+        sbt(chat_id, "Successfully reset welcome message to default!"))
     return "<b>{}:</b>" \
            "\n#RESET_WELCOME" \
            "\n<b>Admin:</b> {}" \
@@ -250,14 +285,17 @@ def clean_welcome(bot: Bot, update: Update, args: List[str]) -> str:
     if not args:
         clean_pref = sql.get_clean_pref(chat.id)
         if clean_pref:
-            update.effective_message.reply_text(sbt(chat_id, "I should be deleting welcome messages up to two days old."))
+            update.effective_message.reply_text(
+                sbt(chat_id, "I should be deleting welcome messages up to two days old."))
         else:
-            update.effective_message.reply_text(sbt(chat_id, "I'm currently not deleting old welcome messages!"))
+            update.effective_message.reply_text(
+                sbt(chat_id, "I'm currently not deleting old welcome messages!"))
         return ""
 
     if args[0].lower() in ("on", "yes"):
         sql.set_clean_welcome(str(chat.id), True)
-        update.effective_message.reply_text(sbt(chat_id, "I'll try to delete old welcome messages!"))
+        update.effective_message.reply_text(
+            sbt(chat_id, "I'll try to delete old welcome messages!"))
         return "<b>{}:</b>" \
                "\n#CLEAN_WELCOME" \
                "\n<b>Admin:</b> {}" \
@@ -265,7 +303,8 @@ def clean_welcome(bot: Bot, update: Update, args: List[str]) -> str:
                                                                          mention_html(user.id, user.first_name))
     elif args[0].lower() in ("off", "no"):
         sql.set_clean_welcome(str(chat.id), False)
-        update.effective_message.reply_text(sbt(chat_id, "I won't delete old welcome messages."))
+        update.effective_message.reply_text(
+            sbt(chat_id, "I won't delete old welcome messages."))
         return "<b>{}:</b>" \
                "\n#CLEAN_WELCOME" \
                "\n<b>Admin:</b> {}" \
@@ -273,7 +312,8 @@ def clean_welcome(bot: Bot, update: Update, args: List[str]) -> str:
                                                                           mention_html(user.id, user.first_name))
     else:
         # idek what you're writing, say yes or no
-        update.effective_message.reply_text(sbt(chat_id, "I understand 'on/yes' or 'off/no' only!"))
+        update.effective_message.reply_text(
+            sbt(chat_id, "I understand 'on/yes' or 'off/no' only!"))
         return ""
 
 
@@ -299,13 +339,15 @@ WELC_HELP_TXT = "Your group's welcome messages can be personalised in multiple w
                 "go. Note that group ids are usually preceded by a `-` sign; this is required, so please don't " \
                 "remove it.\n" \
                 "If you're feeling fun, you can even set images/gifs/videos/voice messages as the welcome message by " \
-                "replying to the desired media, and calling /setwelcome.".format(dispatcher.bot.username)
+                "replying to the desired media, and calling /setwelcome.".format(
+                    dispatcher.bot.username)
 
 
 @run_async
 @user_admin
 def welcome_help(bot: Bot, update: Update):
-    update.effective_message.reply_text(WELC_HELP_TXT, parse_mode=ParseMode.MARKDOWN)
+    update.effective_message.reply_text(
+        WELC_HELP_TXT, parse_mode=ParseMode.MARKDOWN)
 
 
 # TODO: get welcome data from group butler snap
