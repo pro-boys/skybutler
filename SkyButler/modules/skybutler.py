@@ -47,7 +47,8 @@ CREDITS_STRING = """
 
 @run_async
 def credits(bot: Bot, update: Update):
-    update.effective_message.reply_text(CREDITS_STRING, parse_mode=ParseMode.HTML)
+    update.effective_message.reply_text(
+        CREDITS_STRING, parse_mode=ParseMode.HTML)
 
 
 @run_async
@@ -57,7 +58,9 @@ def sudolist(bot: Bot, update: Update):
         name = mention_html(user, bot.get_chat(user).first_name)
         text += "\n - {}".format(name)
 
-    update.effective_message.reply_text(text="{}".format(text), parse_mode=ParseMode.HTML)
+    update.effective_message.reply_text(
+        text="{}".format(text),
+        parse_mode=ParseMode.HTML)
 
 
 @run_async
@@ -82,7 +85,8 @@ def rban(bot: Bot, update: Update, args: List[str]):
         chat = bot.get_chat(chat_id.split()[0])
     except BadRequest as excp:
         if excp.message == "Chat not found":
-            message.reply_text("Chat not found! Make sure you entered a valid chat ID and I'm part of that chat.")
+            message.reply_text(
+                "Chat not found! Make sure you entered a valid chat ID and I'm part of that chat.")
             return
         else:
             raise
@@ -91,8 +95,10 @@ def rban(bot: Bot, update: Update, args: List[str]):
         message.reply_text("I'm sorry, but that's a private chat!")
         return
 
-    if not is_bot_admin(chat, bot.id) or not chat.get_member(bot.id).can_restrict_members:
-        message.reply_text("I can't restrict people there! Make sure I'm admin and can ban users.")
+    if not is_bot_admin(chat, bot.id) or not chat.get_member(
+            bot.id).can_restrict_members:
+        message.reply_text(
+            "I can't restrict people there! Make sure I'm admin and can ban users.")
         return
 
     try:
@@ -150,7 +156,8 @@ def runban(bot: Bot, update: Update, args: List[str]):
         chat = bot.get_chat(chat_id.split()[0])
     except BadRequest as excp:
         if excp.message == "Chat not found":
-            message.reply_text("Chat not found! Make sure you entered a valid chat ID and I'm part of that chat.")
+            message.reply_text(
+                "Chat not found! Make sure you entered a valid chat ID and I'm part of that chat.")
             return
         else:
             raise
@@ -159,8 +166,10 @@ def runban(bot: Bot, update: Update, args: List[str]):
         message.reply_text("I'm sorry, but that's a private chat!")
         return
 
-    if not is_bot_admin(chat, bot.id) or not chat.get_member(bot.id).can_restrict_members:
-        message.reply_text("I can't unrestrict people there! Make sure I'm admin and can unban users.")
+    if not is_bot_admin(chat, bot.id) or not chat.get_member(
+            bot.id).can_restrict_members:
+        message.reply_text(
+            "I can't unrestrict people there! Make sure I'm admin and can unban users.")
         return
 
     try:
@@ -173,7 +182,8 @@ def runban(bot: Bot, update: Update, args: List[str]):
             raise
 
     if is_user_in_chat(chat, user_id):
-        message.reply_text("Why are you trying to remotely unban someone that\'s already in that chat?")
+        message.reply_text(
+            "Why are you trying to remotely unban someone that\'s already in that chat?")
         return
 
     if user_id == bot.id:
@@ -202,18 +212,22 @@ def getlink(bot: Bot, update: Update, args: List[str]):
     if args:
         chat_id = str(args[0])
     else:
-        update.effective_message.reply_text("You don't seem to be referring to a chat")
+        update.effective_message.reply_text(
+            "You don't seem to be referring to a chat")
     for chat_id in args:
         try:
             chat = bot.getChat(chat_id)
             bot_member = chat.get_member(bot.id)
             if bot_member.can_invite_users:
                 invitelink = bot.exportChatInviteLink(chat_id)
-                update.effective_message.reply_text("Invite link for: " + chat_id + "\n" + invitelink)
+                update.effective_message.reply_text(
+                    "Invite link for: " + chat_id + "\n" + invitelink)
             else:
-                update.effective_message.reply_text("I don't have access to the invite link.")
+                update.effective_message.reply_text(
+                    "I don't have access to the invite link.")
         except BadRequest as excp:
-                update.effective_message.reply_text(excp.message + " " + str(chat_id))
+            update.effective_message.reply_text(
+                excp.message + " " + str(chat_id))
 
 
 @run_async
@@ -227,7 +241,8 @@ def del_chat(bot: Bot, update: Update, args: List[str]):
             message.reply_text("I can't seem to find the chat in my database.")
             return
     else:
-        update.effective_message.reply_text("You don't seem to be referring to a chat")
+        update.effective_message.reply_text(
+            "You don't seem to be referring to a chat")
         return
     try:
         sql.del_chat(chat_id)
@@ -242,8 +257,9 @@ def ping(bot: Bot, update: Update):
     start_time = time.time()
     bot.send_message(update.effective_chat.id, "Starting ping testing now!")
     end_time = time.time()
-    ping_time = float(end_time - start_time)*1000
-    update.effective_message.reply_text(" Ping speed was : {}ms".format(ping_time))
+    ping_time = float(end_time - start_time) * 1000
+    update.effective_message.reply_text(
+        " Ping speed was : {}ms".format(ping_time))
 
 
 PING_HANDLER = CommandHandler("ping", ping, filters=CustomFilters.sudo_filter)
