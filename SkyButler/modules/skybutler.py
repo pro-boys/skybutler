@@ -209,6 +209,7 @@ def getlink(bot: Bot, update: Update, args: List[str]):
     if not args:
         update.effective_message.reply_text(
             "You don't seem to be referring to a chat")
+        return
     for chat_id in args:
         try:
             chat = bot.getChat(chat_id)
