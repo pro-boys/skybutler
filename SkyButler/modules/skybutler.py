@@ -29,22 +29,6 @@ RBAN_ERRORS = {
     "Not in the chat"
 }
 
-SPHERICAL_STRINGS = {
-    "@SphericalKat wake up",
-    "@SphericalKat wake up 2",
-    "@SphericalKat wake up 3",
-    "@SphericalKat wake up 4",
-    "@SphericalKat wake up 5",
-    "@SphericalKat wake up 6",
-    "@SphericalKat wake up 7",
-    "@SphericalKat wake up 8",
-    "@SphericalKat wake up 9",
-    "@SphericalKat wake up 10",
-    "@SphericalKat wake up 11",
-    "@SphericalKat wake up 12",
-    "@SphericalKat wake up 13",
-}
-
 CREDITS_STRING = """
 <b>Credits & Special thanks to:</b>
 @SonOfLars - Base
@@ -213,19 +197,6 @@ def runban(bot: Bot, update: Update, args: List[str]):
 
 
 @run_async
-def why(bot: Bot, update: Update):
-    chat_id = update.effective_chat.id
-    update.effective_message.reply_text(sbt(chat_id, "Why? Maybe...Idk ask @Dgnegative"))
-
-
-def sphericalwake(bot: Bot, update: Update):
-    chat = update.effective_chat
-    for text in SPHERICAL_STRINGS:
-        bot.send_message(chat.id, text="{}".format(text))
-        time.sleep(0.3)
-
-
-@run_async
 @bot_admin
 def getlink(bot: Bot, update: Update, args: List[str]):
     if args:
@@ -267,27 +238,6 @@ def del_chat(bot: Bot, update: Update, args: List[str]):
 
 @run_async
 @bot_admin
-@can_restrict
-def birthday(bot: Bot, update: Update):
-        user_id = update.effective_message.from_user.id
-
-        if is_user_admin(update.effective_chat, user_id):
-            update.effective_message.reply_text("Sir i won't gib presents to admins.")
-            return
-
-        try:
-            update.effective_chat.unban_member(user_id)  # unban on current user = kick
-            update.effective_message.reply_text("Ok sir no problem sir i'm with you sir i'm pro sir i like you sir.")
-            bot.send_message(user_id, "Sir i'm sorry i run out of birthday presents so i just kicked you out so you"
-                                      "can't see!")
-        except BadRequest:
-            update.effective_message.reply_text("Oh that person didn't start me what a shame.")
-        except Unauthorized:
-            update.effective_message.reply_text("Oh that person didn't start me what a shame.")
-
-
-@run_async
-@bot_admin
 def ping(bot: Bot, update: Update):
     start_time = time.time()
     bot.send_message(update.effective_chat.id, "Starting ping testing now!")
@@ -301,19 +251,13 @@ GETLINK_HANDLER = CommandHandler("getlink", getlink, pass_args=True, filters=Cus
 RBAN_HANDLER = CommandHandler("rban", rban, pass_args=True, filters=CustomFilters.sudo_filter)
 RUNBAN_HANDLER = CommandHandler("runban", runban, pass_args=True, filters=CustomFilters.sudo_filter)
 DELCHAT_HANDLER = CommandHandler("delchat", del_chat, pass_args=True, filters=CustomFilters.sudo_filter)
-SPHERICAL_HANDLER = CommandHandler("sphericalwake", sphericalwake, filters=CustomFilters.sudo_filter)
-BIRTHDAY_HANDLER = DisableAbleCommandHandler("birthday", birthday)
 SLIST_HANDLER = DisableAbleCommandHandler("sudolist", sudolist)
 CREDITS_HANDLER = DisableAbleCommandHandler("credits", credits)
-WHY_HANDLER = DisableAbleCommandHandler("why", why)
 
 dispatcher.add_handler(SLIST_HANDLER)
-dispatcher.add_handler(SPHERICAL_HANDLER)
 dispatcher.add_handler(DELCHAT_HANDLER)
 dispatcher.add_handler(CREDITS_HANDLER)
-dispatcher.add_handler(WHY_HANDLER)
 dispatcher.add_handler(PING_HANDLER)
 dispatcher.add_handler(GETLINK_HANDLER)
 dispatcher.add_handler(RBAN_HANDLER)
 dispatcher.add_handler(RUNBAN_HANDLER)
-dispatcher.add_handler(BIRTHDAY_HANDLER)
