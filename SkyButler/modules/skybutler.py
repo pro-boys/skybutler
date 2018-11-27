@@ -2,18 +2,16 @@ import time
 from typing import List
 from telegram import ParseMode
 from telegram import Update, Bot
-from telegram.error import BadRequest, Unauthorized
+from telegram.error import BadRequest
 from telegram.utils.helpers import mention_html
 from telegram.ext import CommandHandler
 from telegram.ext.dispatcher import run_async
 from SkyButler.modules.disable import DisableAbleCommandHandler
 from SkyButler.modules.helper_funcs.extraction import extract_user_and_text
-from SkyButler.modules.helper_funcs.chat_status import bot_admin, is_user_ban_protected, is_user_in_chat, can_restrict, \
-    is_bot_admin, is_user_admin
+from SkyButler.modules.helper_funcs.chat_status import bot_admin, is_user_ban_protected, is_user_in_chat, is_bot_admin
 import SkyButler.modules.sql.users_sql as sql
 from SkyButler import dispatcher, SUDO_USERS, LOGGER
 from SkyButler.modules.helper_funcs.filters import CustomFilters
-from SkyButler.modules.translations.strings import sbt
 
 RBAN_ERRORS = {
     "User is an administrator of the chat",
@@ -29,20 +27,19 @@ RBAN_ERRORS = {
     "Not in the chat"
 }
 
-CREDITS_STRING = """
-<b>Credits & Special thanks to:</b>
-@SonOfLars - Base
-@kubersharma
-@kaywhen
-@AyraHikari
-@ganeshvarma
-@Adityaupreti
-@Dyneteve
-@deletescape
-@Sanchith_Hegde
-@julianodorneles
-@sphericalkat
-"""
+CREDITS_STRING = ("\n"
+                  "<b>Credits & Special thanks to:</b>\n"
+                  "@SonOfLars - Base\n"
+                  "@kubersharma\n"
+                  "@kaywhen\n"
+                  "@AyraHikari\n"
+                  "@ganeshvarma\n"
+                  "@Adityaupreti\n"
+                  "@Dyneteve\n"
+                  "@deletescape\n"
+                  "@Sanchith_Hegde\n"
+                  "@julianodorneles\n"
+                  "@sphericalkat\n")
 
 
 @run_async
@@ -209,9 +206,7 @@ def runban(bot: Bot, update: Update, args: List[str]):
 @run_async
 @bot_admin
 def getlink(bot: Bot, update: Update, args: List[str]):
-    if args:
-        chat_id = str(args[0])
-    else:
+    if not args:
         update.effective_message.reply_text(
             "You don't seem to be referring to a chat")
     for chat_id in args:
