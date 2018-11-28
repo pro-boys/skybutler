@@ -32,7 +32,7 @@ ArabicStrings = {
     "Write a location to check the time.": "اكتب موقعًا للتحقق من الوقت.",
     "Why? Maybe...Idk ask @Dgnegative": "لماذا؟ ربما... لا أعرف اسأل Dgnegative",
     "Why are you trying to unban someone that's already in the chat?": "لماذا تحاول إلغاء حظر شخص موجود بالفعل في الدردشة؟",
-    "Which module would you like to check {}'s settings for?": "أى الوحدان الني ترغب فى التحقق من إعدادت {} لها؟",
+    "Which module would you like to check {}'s settings for?": "اختر الوحدة التي ترغب فى التحقق من إعدادت مجموعة {} الخاصة بها.",
     "What should I enable?": "ما الذي يجب علي تمكينه؟",
     "What should I disable?": "ما الذي يجب علي تعطيله؟",
     "What are you trying to unlock...?": "ما الذي تحاول إلغاء قفله؟",
