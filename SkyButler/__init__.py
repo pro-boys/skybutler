@@ -44,7 +44,7 @@ if ENV:
     NO_LOAD = os.environ.get("NO_LOAD", "translation").split()
     DEL_CMDS = bool(os.environ.get('DEL_CMDS', False))
     STRICT_GBAN = bool(os.environ.get('STRICT_GBAN', False))
-#    WORKERS = int(os.environ.get('WORKERS', 8))
+    WORKERS = int(os.environ.get('WORKERS', 8))
     API_WEATHER = os.environ.get('API_OPENWEATHER', None)
 
 else:
@@ -74,12 +74,12 @@ else:
     NO_LOAD = Config.NO_LOAD
     DEL_CMDS = Config.DEL_CMDS
     STRICT_GBAN = Config.STRICT_GBAN
-#    WORKERS = Config.WORKERS
+    WORKERS = Config.WORKERS
     API_WEATHER = Config.API_OPENWEATHER
 
 SUDO_USERS.add(OWNER_ID)
 
-updater = tg.Updater(TOKEN)
+updater = tg.Updater(TOKEN, workers=WORKERS)
 
 dispatcher = updater.dispatcher
 
