@@ -339,20 +339,20 @@ def build_lock_message(chat_id):
     else:
         res = sbt(chat_id, "These are the locks in this chat:")
         if locks:
-            res += "\n - sticker = `{}`" \
+            res += "\n - stickers = `{}`" \
                    "\n - audio = `{}`" \
                    "\n - voice = `{}`" \
-                   "\n - document = `{}`" \
-                   "\n - video = `{}`" \
-                   "\n - videonote = `{}`" \
-                   "\n - contact = `{}`" \
-                   "\n - photo = `{}`" \
-                   "\n - gif = `{}`" \
-                   "\n - url = `{}`" \
+                   "\n - documents = `{}`" \
+                   "\n - videos = `{}`" \
+                   "\n - videonotes = `{}`" \
+                   "\n - contacts = `{}`" \
+                   "\n - photos = `{}`" \
+                   "\n - gifs = `{}`" \
+                   "\n - urls = `{}`" \
                    "\n - bots = `{}`" \
-                   "\n - forward = `{}`" \
-                   "\n - game = `{}`" \
-                   "\n - location = `{}`".format(locks.sticker, locks.audio, locks.voice, locks.document,
+                   "\n - forwards = `{}`" \
+                   "\n - games = `{}`" \
+                   "\n - locations = `{}`".format(locks.sticker, locks.audio, locks.voice, locks.document,
                                                  locks.video, locks.videonote, locks.contact, locks.photo, locks.gif, locks.url,
                                                  locks.bots, locks.forward, locks.game, locks.location)
         if restr:
