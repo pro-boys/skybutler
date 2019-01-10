@@ -2,7 +2,7 @@ import telegram.ext as tg
 from telegram import Update
 from SkyButler.modules.sql.global_bans_sql import is_user_gbanned
 
-CMD_STARTERS = ('/', '!', '.')
+CMD_STARTERS = ('/', '!')
 
 
 class SkyCommandHandler(tg.CommandHandler):

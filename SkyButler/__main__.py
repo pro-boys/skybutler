@@ -38,7 +38,7 @@ the things I can help you with.
 
 Other available commands:
 
-All commands can either be used with / ! and .
+All commands can either be used with / and !
 """
 
 IMPORTED = {}
