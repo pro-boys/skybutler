@@ -2,7 +2,6 @@ future
 emoji
 requests
 sqlalchemy
-https://github.com/anandpskerala/python-telegram-bot/archive/master.zip
 psycopg2-binary
 feedparser
 pyowm
