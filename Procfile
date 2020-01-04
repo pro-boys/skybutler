@@ -1,1 +1,1 @@
-worker: python3 -m Skybutler
+worker: python3 -m SkyButler
